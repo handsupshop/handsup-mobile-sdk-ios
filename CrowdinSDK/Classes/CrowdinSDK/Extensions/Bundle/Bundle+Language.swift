@@ -17,20 +17,11 @@ extension Bundle {
     /// Return ordered list of language codes according to device settings, and bundle localizations.
 	//	TODO: Add handling case when intersection of preffered languages from settings and localizations in bundle is empty.
     var preferredLanguages: [String] {
-        var preferredLanguages = Locale.preferredLocalizations
-		let localizations = self.localizations.compactMap { (localization) -> String? in
-			if preferredLanguages.contains(localization) {
-				return localization
-			}
-			return nil
-		}
-		preferredLanguages = preferredLanguages.compactMap { (localization) -> String? in
-			if localizations.contains(localization) {
-				return localization
-			}
-			return nil
-		}
-        return preferredLanguages
+        return Locale.preferredLocalizations.compactMap { (localization) -> String? in
+            return self.localizations.first { (language) -> Bool in
+                return localization.hasPrefix(language)
+            }
+        }
     }
     
     /// Returns detected preffered language from device settings and passed localizations. If bundle localizations is empty then return default locazation - "en".
@@ -40,19 +31,10 @@ extension Bundle {
     
     /// Return ordered list of language codes according to device settings, and passed localizations.
     func preferredLanguages(with availableLanguages: [String]) -> [String] {
-        var preferredLanguages = Locale.preferredLocalizations
-        let localizations = availableLanguages.compactMap { (localization) -> String? in
-            if preferredLanguages.contains(localization) {
-                return localization
+        return Locale.preferredLocalizations.compactMap { (localization) -> String? in
+            return availableLanguages.first { (language) -> Bool in
+                return localization.hasPrefix(language)
             }
-            return nil
         }
-        preferredLanguages = preferredLanguages.compactMap { (localization) -> String? in
-            if localizations.contains(localization) {
-                return localization
-            }
-            return nil
-        }
-        return preferredLanguages
     }
 }
