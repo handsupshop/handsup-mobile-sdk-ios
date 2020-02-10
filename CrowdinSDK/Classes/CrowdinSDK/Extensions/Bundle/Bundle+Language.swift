@@ -19,6 +19,12 @@ extension Bundle {
     var preferredLanguages: [String] {
         return Locale.preferredLocalizations.compactMap { (localization) -> String? in
             return self.localizations.first { (language) -> Bool in
+                let localization = localization.lowercased()
+                let language = language.lowercased()
+
+                if localization.hasPrefix("zh") {
+                    return language == "zh-hant"
+                }
                 return localization.hasPrefix(language)
             }
         }
@@ -33,6 +39,12 @@ extension Bundle {
     func preferredLanguages(with availableLanguages: [String]) -> [String] {
         return Locale.preferredLocalizations.compactMap { (localization) -> String? in
             return availableLanguages.first { (language) -> Bool in
+                let localization = localization.lowercased()
+                let language = language.lowercased()
+
+                if localization.hasPrefix("zh") {
+                    return language == "zh-hant"
+                }
                 return localization.hasPrefix(language)
             }
         }
